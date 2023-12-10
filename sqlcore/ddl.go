@@ -5,22 +5,22 @@ import (
 	"crypto/ed25519"
 	"encoding/json"
 	"fmt"
+	"go.pkg.dev/sxt-sdks/helpers"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"sxt-sdks/helpers"
 )
 
 // Create a new table on a given namespace.
 // accessType: can be public, permissioned or encrypted. Read more here https://docs.spaceandtime.io/docs/secure-your-table
-func CreateTable(sqlText, accessType, originApp string, biscuitArray []string, publicKey ed25519.PublicKey)(errMsg string, status bool) {
+func CreateTable(sqlText, accessType, originApp string, biscuitArray []string, publicKey ed25519.PublicKey) (errMsg string, status bool) {
 	apiEndPoint, _ := helpers.ReadEndPointGeneral()
 	tokenEndPoint := apiEndPoint + "/sql/ddl"
 
 	client := http.Client{}
 	postBody, _ := json.Marshal(map[string]interface{}{
 		"biscuits": biscuitArray,
-		"sqlText": sqlText + " WITH \"public_key=" + fmt.Sprintf("%x",publicKey) + ",access_type=" + accessType + "\"",
+		"sqlText":  sqlText + " WITH \"public_key=" + fmt.Sprintf("%x", publicKey) + ",access_type=" + accessType + "\"",
 	})
 
 	responseBody := bytes.NewBuffer(postBody)
@@ -48,20 +48,20 @@ func CreateTable(sqlText, accessType, originApp string, biscuitArray []string, p
 
 	if res.StatusCode != 200 {
 		return string(body), false
-	} 
+	}
 
 	return "", true
 }
 
 // DDL queries for ALTER and DROP
-func DDL(sqlText, originApp  string, biscuitArray []string) (errMsg string, status bool){
+func DDL(sqlText, originApp string, biscuitArray []string) (errMsg string, status bool) {
 	apiEndPoint, _ := helpers.ReadEndPointGeneral()
 	tokenEndPoint := apiEndPoint + "/sql/ddl"
 
 	client := http.Client{}
 	postBody, _ := json.Marshal(map[string]interface{}{
 		"biscuits": biscuitArray,
-		"sqlText":    sqlText,
+		"sqlText":  sqlText,
 	})
 
 	responseBody := bytes.NewBuffer(postBody)
@@ -92,18 +92,18 @@ func DDL(sqlText, originApp  string, biscuitArray []string) (errMsg string, stat
 	}
 
 	return "", true
-	
+
 }
 
 // Create a new schema
-func CreateSchema(sqlText, originApp  string, biscuitArray []string)(errMsg string, status bool) {
+func CreateSchema(sqlText, originApp string, biscuitArray []string) (errMsg string, status bool) {
 	apiEndPoint, _ := helpers.ReadEndPointGeneral()
 	tokenEndPoint := apiEndPoint + "/sql/ddl"
 
 	client := http.Client{}
 	postBody, _ := json.Marshal(map[string]interface{}{
 		"biscuits": biscuitArray,
-		"sqlText": sqlText,
+		"sqlText":  sqlText,
 	})
 
 	responseBody := bytes.NewBuffer(postBody)
@@ -131,7 +131,7 @@ func CreateSchema(sqlText, originApp  string, biscuitArray []string)(errMsg stri
 
 	if res.StatusCode != 200 {
 		return string(body), false
-	} 
+	}
 
 	return "", true
 }

@@ -8,13 +8,13 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"sxt-sdks/authentication"
-	"sxt-sdks/authorization"
-	"sxt-sdks/discovery"
-	"sxt-sdks/helpers"
-	"sxt-sdks/sqlcore"
-	"sxt-sdks/sqlview"
-	"sxt-sdks/storage"
+	"go.pkg.dev/sxt-sdks/authentication"
+	"go.pkg.dev/sxt-sdks/authorization"
+	"go.pkg.dev/sxt-sdks/discovery"
+	"go.pkg.dev/sxt-sdks/helpers"
+	"go.pkg.dev/sxt-sdks/sqlcore"
+	"go.pkg.dev/sxt-sdks/sqlview"
+	"go.pkg.dev/sxt-sdks/storage"
 )
 
 // Check the command line arguments

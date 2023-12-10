@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"sxt-sdks/helpers"
+	"go.pkg.dev/sxt-sdks/helpers"
 )
 
 // List available namespaces in the blockchain
