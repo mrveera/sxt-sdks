@@ -6,15 +6,15 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/mrveera/sxt-sdks/authentication"
+	"github.com/mrveera/sxt-sdks/authorization"
+	"github.com/mrveera/sxt-sdks/discovery"
+	"github.com/mrveera/sxt-sdks/helpers"
+	"github.com/mrveera/sxt-sdks/sqlcore"
+	"github.com/mrveera/sxt-sdks/sqlview"
+	"github.com/mrveera/sxt-sdks/storage"
 	"log"
 	"os"
-	"sxt-sdks/authentication"
-	"sxt-sdks/authorization"
-	"sxt-sdks/discovery"
-	"sxt-sdks/helpers"
-	"sxt-sdks/sqlcore"
-	"sxt-sdks/sqlview"
-	"sxt-sdks/storage"
 )
 
 // Check the command line arguments
@@ -237,11 +237,10 @@ func main() {
 
 	biscuit, _ := authorization.CreateBiscuitToken(sxtBiscuitCapabilities, &privateKey)
 
-	// Set some constant values 
+	// Set some constant values
 	// Create multiple biscuits
 	mb := []string{biscuit}
 	originApp := "TEST"
-
 
 	/*************************************
 	// SQL CORE
@@ -256,8 +255,6 @@ func main() {
 	// Only for create queries
 	// For ALTER and DROP, use sqlcore.DDL()
 	sqlcore.CreateTable("CREATE TABLE ETH.TESTTABLE106 (id INT PRIMARY KEY, test VARCHAR)", "ALL", originApp, mb, publicKey)
-
-
 
 	// DML
 	// use the sqlcore.DML to write insert, update, delete, and merge queries
@@ -278,7 +275,7 @@ func main() {
 	// Only for ALTER and DROP queries
 	// For Create table queries, use sqlcore.CreateTable()
 	// For this to work, you will need to provide permissions in biscuit first
-	sqlcore.DDL("DROP TABLE ETH.TESTTABLE106", originApp, mb  )
+	sqlcore.DDL("DROP TABLE ETH.TESTTABLE106", originApp, mb)
 
 	/*************************************
 	// SQL VIEW
@@ -309,9 +306,9 @@ func main() {
 	discovery.ListSchemas("ALL", "")
 
 	// List Tables in a given schema
-	// Possible scope values -  
-	// 1. ALL = all resources, 
-	// 2. PUBLIC = non-permissioned tables, 
+	// Possible scope values -
+	// 1. ALL = all resources,
+	// 2. PUBLIC = non-permissioned tables,
 	// 3. PRIVATE = tables created by the requesting user
 	// 4. SUBSCRIPTION =  include all resources the requesting user can see
 	// Note: schema and table names are case sensitive. Upper cased

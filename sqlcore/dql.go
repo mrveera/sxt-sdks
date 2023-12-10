@@ -3,37 +3,35 @@ package sqlcore
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/mrveera/sxt-sdks/helpers"
 	"io/ioutil"
 	"net/http"
 	"os"
-	"sxt-sdks/helpers"
 )
 
 // Run all DQL queries
 // rowCount is optional
-func DQL(sqlText, originApp string, biscuitArray, resources []string, rowCount int) (data []byte, errMsg string, status bool){
+func DQL(sqlText, originApp string, biscuitArray, resources []string, rowCount int) (data []byte, errMsg string, status bool) {
 	apiEndPoint, _ := helpers.ReadEndPointGeneral()
 	tokenEndPoint := apiEndPoint + "/sql/dql"
 
-	
 	client := http.Client{}
-	var postBody []byte;
+	var postBody []byte
 
 	if rowCount > 0 {
 		postBody, _ = json.Marshal(map[string]interface{}{
-			"biscuits": biscuitArray,
+			"biscuits":  biscuitArray,
 			"resources": resources,
-			"sqlText":    sqlText,
-			"rowCount": rowCount,
+			"sqlText":   sqlText,
+			"rowCount":  rowCount,
 		})
 	} else {
 		postBody, _ = json.Marshal(map[string]interface{}{
-			"biscuits": biscuitArray,
+			"biscuits":  biscuitArray,
 			"resources": resources,
-			"sqlText":    sqlText,
+			"sqlText":   sqlText,
 		})
 	}
-	
 
 	responseBody := bytes.NewBuffer(postBody)
 
@@ -60,7 +58,6 @@ func DQL(sqlText, originApp string, biscuitArray, resources []string, rowCount i
 	if res.StatusCode != 200 {
 		return data, string(body), false
 	}
-
 
 	return body, "", true
 }

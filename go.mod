@@ -1,4 +1,4 @@
-module sxt-sdks
+module github.com/mrveera/sxt-sdks
 
 go 1.18
 
