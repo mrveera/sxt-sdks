@@ -1,4 +1,4 @@
-module sxt-sdks
+module go.pkg.dev/sxt-sdks
 
 go 1.18
 
