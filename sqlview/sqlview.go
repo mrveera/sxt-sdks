@@ -3,21 +3,21 @@ package sqlview
 import (
 	"bytes"
 	"encoding/json"
+	"github.com/mrveera/sxt-sdks/helpers"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
-	"sxt-sdks/helpers"
 )
-type ParametersRequest struct{
+
+type ParametersRequest struct {
 	Name string `json:"Name"`
 	Type string `json:"Type"`
 }
 
-
 // Create sql view
 // parameterRequest is optional
-func Create(resourceId, viewName, viewText, description string, publish bool, parametersRequest []ParametersRequest) (output, errMsg string, status bool){
+func Create(resourceId, viewName, viewText, description string, publish bool, parametersRequest []ParametersRequest) (output, errMsg string, status bool) {
 	apiEndPoint, _ := helpers.ReadEndPointGeneral()
 	tokenEndPoint := apiEndPoint + "/sql/views"
 
@@ -27,27 +27,27 @@ func Create(resourceId, viewName, viewText, description string, publish bool, pa
 	}
 
 	var postBody []byte
-	if len(parametersRequest) > 0{
+	if len(parametersRequest) > 0 {
 		pr, _ := json.Marshal(parametersRequest)
 
 		postBody, _ = json.Marshal(map[string]interface{}{
-			"viewName": viewName,
-			"viewText":    viewText,
-			"resourceId": resourceId,
-			"description": description,
-			"publish": publish,
+			"viewName":          viewName,
+			"viewText":          viewText,
+			"resourceId":        resourceId,
+			"description":       description,
+			"publish":           publish,
 			"parametersRequest": string(pr),
 		})
 	} else {
 		postBody, _ = json.Marshal(map[string]interface{}{
-			"viewName": viewName,
+			"viewName":    viewName,
 			"viewText":    viewText,
-			"resourceId": resourceId,
+			"resourceId":  resourceId,
 			"description": description,
-			"publish": publish,
+			"publish":     publish,
 		})
 	}
-	
+
 	client := http.Client{}
 	responseBody := bytes.NewBuffer(postBody)
 
@@ -80,9 +80,9 @@ func Create(resourceId, viewName, viewText, description string, publish bool, pa
 
 // Execute a view
 // parameterRequest is optional
-func Execute(viewName string, parametersRequest []ParametersRequest) (errMsg string, status bool){
+func Execute(viewName string, parametersRequest []ParametersRequest) (errMsg string, status bool) {
 	apiEndPoint, _ := helpers.ReadEndPointGeneral()
-	tokenEndPoint := apiEndPoint + "/sql/views/"+ url.QueryEscape(viewName)
+	tokenEndPoint := apiEndPoint + "/sql/views/" + url.QueryEscape(viewName)
 
 	paramString := ""
 
@@ -95,24 +95,22 @@ func Execute(viewName string, parametersRequest []ParametersRequest) (errMsg str
 		tokenEndPoint += "?params=" + paramString
 	}
 
-
 	client := http.Client{}
-	req , err := http.NewRequest("GET", tokenEndPoint, nil)
+	req, err := http.NewRequest("GET", tokenEndPoint, nil)
 	if err != nil {
 		return err.Error(), false
 	}
 
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("Authorization", "Bearer " + os.Getenv("accessToken"))
+	req.Header.Add("Authorization", "Bearer "+os.Getenv("accessToken"))
 
 	res, err := client.Do(req)
 	if err != nil {
 		return err.Error(), false
 	}
 
-
 	defer res.Body.Close()
-    _, err = ioutil.ReadAll(res.Body)
+	_, err = ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err.Error(), false
 	}
@@ -122,9 +120,9 @@ func Execute(viewName string, parametersRequest []ParametersRequest) (errMsg str
 
 // Update sql view
 // parameterRequest is optional
-func Update(resourceId, viewName, viewText, description string, publish bool, parametersRequest []ParametersRequest) (output, errMsg string, status bool){
+func Update(resourceId, viewName, viewText, description string, publish bool, parametersRequest []ParametersRequest) (output, errMsg string, status bool) {
 	apiEndPoint, _ := helpers.ReadEndPointGeneral()
-	tokenEndPoint := apiEndPoint + "/sql/views/"+ viewName
+	tokenEndPoint := apiEndPoint + "/sql/views/" + viewName
 
 	re, r := helpers.CheckUpperCaseResource(resourceId)
 	if !r {
@@ -132,27 +130,27 @@ func Update(resourceId, viewName, viewText, description string, publish bool, pa
 	}
 
 	var postBody []byte
-	if len(parametersRequest) > 0{
+	if len(parametersRequest) > 0 {
 		pr, _ := json.Marshal(parametersRequest)
 
 		postBody, _ = json.Marshal(map[string]interface{}{
-			"viewName": viewName,
-			"viewText":    viewText,
-			"resourceId": resourceId,
-			"description": description,
-			"publish": publish,
+			"viewName":          viewName,
+			"viewText":          viewText,
+			"resourceId":        resourceId,
+			"description":       description,
+			"publish":           publish,
 			"parametersRequest": string(pr),
 		})
 	} else {
 		postBody, _ = json.Marshal(map[string]interface{}{
-			"viewName": viewName,
+			"viewName":    viewName,
 			"viewText":    viewText,
-			"resourceId": resourceId,
+			"resourceId":  resourceId,
 			"description": description,
-			"publish": publish,
+			"publish":     publish,
 		})
 	}
-	
+
 	client := http.Client{}
 	responseBody := bytes.NewBuffer(postBody)
 
@@ -183,12 +181,11 @@ func Update(resourceId, viewName, viewText, description string, publish bool, pa
 	return string(body), "", true
 }
 
-
 // Delete sql view
 // parameterRequest is optional
-func Delete(viewName string) (output, errMsg string, status bool){
+func Delete(viewName string) (output, errMsg string, status bool) {
 	apiEndPoint, _ := helpers.ReadEndPointGeneral()
-	tokenEndPoint := apiEndPoint + "/sql/views/"+ viewName
+	tokenEndPoint := apiEndPoint + "/sql/views/" + viewName
 
 	client := http.Client{}
 
