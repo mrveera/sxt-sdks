@@ -10,15 +10,9 @@ import (
 )
 
 // Run all DML queries
-func DML(sqlText, originApp string, biscuitArray []string, resources []string, accesstoken string) (errMsg string, status bool) {
+func DML(sqlText, originApp string, biscuitArray []string, resources []string) (errMsg string, status bool) {
 	apiEndPoint, _ := helpers.ReadEndPointGeneral()
 	tokenEndPoint := apiEndPoint + "/sql/dml"
-
-	at := accesstoken
-
-	if accesstoken == "" {
-		at = os.Getenv("accessToken")
-	}
 
 	client := http.Client{}
 	postBody, _ := json.Marshal(map[string]interface{}{
@@ -34,7 +28,7 @@ func DML(sqlText, originApp string, biscuitArray []string, resources []string, a
 		return err.Error(), false
 	}
 
-	req.Header.Add("Authorization", "Bearer "+at)
+	req.Header.Add("Authorization", "Bearer "+os.Getenv("accessToken"))
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("originApp", originApp)
